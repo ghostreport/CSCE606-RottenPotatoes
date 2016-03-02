@@ -11,7 +11,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings =  ['G','PG','PG-13','R']
+    @sort = params[:sort] || session[:sort] # This keeps :sort alive even if query is made
+    @checked_ratings = params[:ratings] || session[:ratings]
+    session[:sort] = @sort
+    session[:ratings] = @checked_ratings
+
+    @movies = Movie.order @sort
+    @movies = @movies.find_all{ |m| session[:ratings].has_key?(m.rating) }
   end
 
   def new
