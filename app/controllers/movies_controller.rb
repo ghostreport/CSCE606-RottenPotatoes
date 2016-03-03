@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
     session[:ratings] = @checked_ratings
 
     @movies = Movie.order @sort
-    @movies = @movies.find_all{ |m| session[:ratings].has_key?(m.rating) }
+    @movies = Movie.where(:rating => @checked_ratings.keys).order @sort
   end
 
   def new
